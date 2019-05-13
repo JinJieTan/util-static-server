@@ -12,7 +12,6 @@ const { createDeflate, createGzip } = require("zlib")
 const { exec } = require("child_process")
 module.exports = function server(argv) {
     const config = Object.assign(configs, argv)
-    console.log(config)
     if (process.platform) {
         const url = `${config.host}:${config.port}`
         switch (process.platform) {
@@ -32,7 +31,8 @@ module.exports = function server(argv) {
             w.pipe(res)
         } else {
             try {
-                const absolutePath = join(__dirname, url)
+                let absolutePath = join(__dirname, url)
+                absolutePath = decodeURI(absolutePath)
                 let urlPath = ''
                 if (url === '/') {
                     urlPath = ''
